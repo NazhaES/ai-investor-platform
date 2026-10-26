@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: investor-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-investor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-investor}
+      POSTGRES_DB: ${POSTGRES_DATABASE:-investor}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-investor} -d ${POSTGRES_DATABASE:-investor}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: investor-app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      MODELS_CACHE_DIR: /models
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.cache/models:/models
+      - ./data:/app/data
+      - ./templates:/app/templates
+      - ./static:/app/static
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
