@@ -2,6 +2,8 @@
 
 An AI-powered platform that turns corporate financial reports (10-K, annual reports) into structured insights — combining RAG-based conversational search with an executive dashboard.
 
+![Dashboard Demo](docs/demo.png)
+
 ## Main Objective
 
 Investors and analysts spend hours reading hundreds of pages of financial reports to find key figures, risks, and growth drivers. This platform automates that work: upload a PDF report, and the system extracts the KPIs, identifies risks and growth drivers, and lets you ask questions in natural language — with answers grounded strictly in the document.
